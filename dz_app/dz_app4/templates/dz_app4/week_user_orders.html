@@ -1,0 +1,15 @@
+{% extends 'dz_app4/base.html' %}
+{% load static %}
+{% block title %} Заказы клиента: {{ user.name }} {% endblock %}
+
+{% block context %}
+    <h2>Заказы клиента {{ user.name }} за неделю:</h2>
+        <table>
+            {% for order in orders %}
+                <tr>
+                    <td>{{ views.get_order_week }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+{% endblock %}

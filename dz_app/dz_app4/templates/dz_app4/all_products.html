@@ -1,0 +1,14 @@
+{% extends 'dz_app4/base.html' %}
+{% load static %}
+{% block title %}Страница продукта{% endblock %}
+
+{% block content %}
+    <h2>Меню магазина</h2>
+
+    <h3>Все продукты интернет-мазина:</h3>
+    <ul>
+    {% for x in context %}
+        <li> {{ x }}</li>
+    {% endfor %}
+    </ul>
+{% endblock %}

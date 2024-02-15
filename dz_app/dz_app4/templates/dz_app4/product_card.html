@@ -1,0 +1,31 @@
+{% extends 'dz_app4/base.html' %}
+{% load static %}
+{% block title %}Страница продукта{% endblock %}
+
+{% block content %}
+
+<body>
+    <h3> ID:  {{ product.id }}, Наименование:  {{ product.name }}</h3> <HR>
+    <table>
+        <tr>
+            <th style="width:80px; text-align:left">ID</th>
+            <th style="width:400px; text-align:left">Продукт</th>
+            <th style="width:100px; text-align:left">Цена</th>
+            <th style="width:80px; text-align:left">К-во</th>
+            <th style="width:400px; text-align:center">Дата получения</th>
+            <th style="width:400px; text-align:left">Описание</th>
+            <th style="width:1500px; text-align:center">Фото</th>
+        </tr>
+
+        <tr>
+            <td>{{ product.pk }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.price }}</td>
+            <td>{{ product.store }}</td>
+            <td>{{ product.date_receipt }}</td>
+            <td>{{ product.description }}</td>
+            <td>{{ product.image_field }}</td>
+        </tr>
+    </table>
+</body>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'dz_app4/base.html' %}
+{% load static %}
+{% block title %} Все заказы {% endblock %}
+
+{% block content %}
+    <h1>Все заказы магазина</h1>
+
+    <h2>Все заказы интернет-мазина:</h2>
+    {% for item in context %}
+        <li>{{ item }}</li>
+    {% endfor %}
+
+
+{% endblock %}

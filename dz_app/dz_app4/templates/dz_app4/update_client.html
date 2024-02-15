@@ -1,0 +1,12 @@
+{% extends 'dz_app4/base.html' %}
+{% load static %}
+{% block title %}Обновление данных клиента{% endblock %}
+
+{% block content %}
+<h3>{{ message }}</h3>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Отправить">
+</form>
+{% endblock %}

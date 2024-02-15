@@ -1,0 +1,14 @@
+{% extends 'dz_app4/base.html' %}
+
+{% block title %} Все заказы клиента {% endblock %}
+
+{% block content %}
+    <h1>Все заказы клиента DZ 3</h1>
+
+    <h2>Все заказы клиента  {{ User.id }}:  {{ User.name }}</h2>
+    {% for item in orders %}
+        <li>{{ item }}</li>
+    {% endfor %}
+
+
+{% endblock %}
