@@ -1,7 +1,7 @@
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from . models import User, Product, Order
+from . models import User, Product, Order, Gallery
 from . forms import ImageForm, ProductForm, UserForm
 import logging
 
@@ -56,7 +56,7 @@ def get_customer_orders(request, pk):
     orders = Order.objects.filter(customer=customer).all()
 
     logger.info("Page about client's orders accessed")
-    return render(request, template_name='hw_app/order.html', context={'orders': orders, 'customer': customer, })
+    return render(request, template_name='dz_app4/order.html', context={'orders': orders, 'customer': customer, })
 
 
 def get_user_order(request, user_id):
@@ -96,12 +96,32 @@ def user_4order_in_year(request):
     return HttpResponse(out_str)
 
 
+def add_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        message = 'Повторите ввод данных'
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            price = form.cleaned_data['price']
+            description = form.cleaned_data['description']
+            date_receipt = form.cleaned_data['date_receipt']
+            store = form.cleaned_data['store']
+            product = Product(name=name, price=price, description=description, date_receipt=date_receipt, store=store)
+            product.save()
+            message = 'Данные успешно сохранены'
+            logger.info(f"Обновлен подукт: {name}, цена:{price}, дата поступления:{date_receipt}, количество:{store}")
+    else:
+        form = ProductForm()
+        message = 'Заполните форму'
+    return render(request, 'dz_app4/update_product.html', {'form': form, 'message': message})
+
+
 def update_product(request):
     if request.method == 'POST':
         form = ProductForm(request.POST)
         message = 'Повторите ввод данных'
         if form.is_valid():
-            product = form.cleaned_data['product']
+            product = form.cleaned_data['name']
             product_name = product.name
             updated_product = Product.objects.filter(name=product_name).first()
 
@@ -125,12 +145,36 @@ def update_product(request):
     return render(request, 'dz_app4/update_product.html', {'form': form, 'message': message})
 
 
+def add_user(request):
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        message = 'Повторите ввод данных'
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            adress = form.cleaned_data['adress']
+            tel = form.cleaned_data['tel']
+            date_visit = form.cleaned_data['date_visit']
+            about_ = form.cleaned_data['about']
+
+            client = User(name=name, email=email, adress=adress, tel=tel, date_visit=date_visit, about=about_)
+            client.save()
+            message = 'Данные успешно сохранены'
+            logger.info(
+                f"Добавлен пользователь: {name}, {email}, телефон:{tel}, {adress}, {date_visit}, комментарии:{about_}")
+    else:
+        form = UserForm()
+        message = 'Заполните форму'
+    return render(request, 'dz_app4/update_client.html', {'form': form, 'message': message})
+
+
 def update_client(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
         message = 'Повторите ввод данных'
         if form.is_valid():
-            client = form.cleaned_data['product']
+            client = form.cleaned_data['name']
+            # client = form.cleaned_data['product']
             client_name = client.name
             updated_client = User.objects.filter(name=client_name).first()
 
@@ -142,10 +186,10 @@ def update_client(request):
             about_ = form.cleaned_data['about']
 
             updated_client.name = name
-            updated_client.price = email
-            updated_client.description = adress
-            updated_client.date_receipt = tel
-            updated_client.store = date_visit
+            updated_client.email = email
+            updated_client.adress = adress
+            updated_client.tel = tel
+            updated_client.date_visit = date_visit
             updated_client.about_ = about_
             updated_client.save()
             message = 'Данные успешно сохранены'
@@ -169,3 +213,10 @@ def upload_image(request, product_id):
     else:
         form = ImageForm()
     return render(request, 'dz_app4/upload_image.html', {'form': form})
+
+
+def get_media(request):
+    media = Gallery.objects.all()
+    context = {'media': media}
+    template = 'gallery.html'
+    return render(request, template, context=context)

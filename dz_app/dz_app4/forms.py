@@ -1,9 +1,9 @@
 from django import forms
-from . models import Product, User
+from .models import Product, User
 
 
 class UserForm(forms.Form):  # Товар
-    client = forms.ModelChoiceField(queryset=User.objects.all())
+    # client = forms.ModelChoiceField(queryset=User.objects.all())
     name = forms.CharField(max_length=100,
                            widget=forms.TextInput(attrs={'class': 'form-control',
                                                          'placeholder': 'Введите имя пользователя'}))
@@ -17,7 +17,7 @@ class UserForm(forms.Form):  # Товар
 
 
 class ProductForm(forms.Form):  # Товар
-    product = forms.ModelChoiceField(queryset=Product.objects.all())
+    # product = forms.ModelChoiceField(queryset=Product.objects.all())
     name = forms.CharField(max_length=100,
                            widget=forms.TextInput(attrs={'class': 'form-control',
                                                          'placeholder': 'Введите название продукта'}))

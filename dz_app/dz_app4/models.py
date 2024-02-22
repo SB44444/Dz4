@@ -7,7 +7,7 @@ class User(models.Model):  # Клиент
     adress = models.CharField(max_length=100)
     tel = models.CharField(max_length=20)
     date_visit = models.DateTimeField(auto_now_add=True)
-    about = models.TextField()
+    about = models.TextField(null=True, default=None, max_length=200)
 
     def __str__(self):
         return (f'Клиент: {self.name}, почта: {self.email}, адрес: {self.adress}, телефон: {self.tel},/'
@@ -36,3 +36,14 @@ class Order(models.Model):  # Заказ
     def __str__(self):
         return (f'Клиент: {self.customer}, товар: {self.products},/'
                 f'дата_заказа: {self.date_ordered}, сумма: {self.total_price}')
+
+
+class Gallery(models.Model):
+    name = models.CharField(max_length=400, db_index=True)
+    image = models.ImageField(upload_to='media/%Y/%m/%d', blank=True)
+
+    class Meta:
+        ordering = ('name',)
+
+    def __str__(self):
+        return self.image.url

@@ -15,7 +15,7 @@ class Command(BaseCommand):
         parser.add_argument('adress', type=str, help="Адрес заказчика")
         parser.add_argument('tel', type=str, help="Телефон заказчика")
         parser.add_argument('adress', type=str, help="Дата первого визита заказчика")
-        parser.add_argument('birthday', type=str, help="Комментарии")
+        parser.add_argument('about', type=str, help="Комментарии")
 
     def handle(self, *args, **kwargs):
         name = kwargs.get('name')

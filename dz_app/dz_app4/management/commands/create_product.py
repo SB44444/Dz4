@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = "Create Product."
+    help = "Create Product"
 
     def add_arguments(self, parser):
         parser.add_argument('name', type=str, help="Название продукта")
@@ -30,7 +30,7 @@ class Command(BaseCommand):
 
         product.save()
         self.stdout.write(f'Создан продукт: {product}')
-        logger.info('Product created')
+        logger.info(f'Product {name} created {date_receipt}')
 
     # def handle(self, *args, **kwargs):
     #     # product = Product(name='Pizza_Cheese', price=499, description='description', store=5)

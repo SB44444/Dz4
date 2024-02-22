@@ -12,7 +12,7 @@ class UserAdmin(admin.ModelAdmin):
 
     """Отдельный клиент"""
     # fields = ['name', 'email', 'tel', 'date_visit', 'adress']
-    readonly_fields = ['date_visit']  # Поле только для чтения
+    # readonly_fields = ['date_visit']  # Поле только для чтения
 
     fieldsets = [
         (
@@ -27,7 +27,7 @@ class UserAdmin(admin.ModelAdmin):
             {
                 'classes': ['collapse'],
                 'description': 'Contact information',
-                'fields': ['tel', 'address'],
+                'fields': ['tel', 'adress'],
             },
         ),
         (
@@ -51,7 +51,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ['name', 'price', 'store', 'date_receipt']  # Список отбора по строкам
     search_fields = ['name', 'price', 'date_receipt']  # Список строк для поиска
     search_help_text = "Поиск возможен по: 'name', 'price', 'date_receipt'"  # Текст справки
-    readonly_fields = ['image_field']  # Поле только для чтения # (добавить 'id')
+    readonly_fields = ['date_receipt']  # Поле только для чтения # (добавить 'id')
 
     actions = [reset_store]  # Ф-ция массового сброса/установки количества товара, по умолчанию 0
 
@@ -60,23 +60,23 @@ class ProductAdmin(admin.ModelAdmin):
             'Продукт',
             {
                 'classes': ['wide'],
-                'fields': ['name', 'price', 'store'],
+                'fields': ['name', 'price', 'store', 'date_receipt'],
             },
         ),
         (
-            'Подробнее',
+            'Описание',
             {
                 'classes': ['collapse'],
-                'description': 'Contact information',
-                'fields': ['date_receipt'],
+                'description': 'О товаре',
+                'fields': ['description'],
             },
         ),
         (
             'Дополнительно',
             {
                 'classes': ['collapse'],
-                'description': 'Дополнительная информация',
-                'fields': ['description', 'image_field'],
+                'description': 'Фото',
+                'fields': ['image_field'],
             }
         ),
     ]
@@ -84,11 +84,11 @@ class ProductAdmin(admin.ModelAdmin):
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['customer', 'total_price', 'date_ordered']  # Отображаемые поля
-    ordering = ['customer', 'total_price', '-date_ordered']  # Сортировка по строкам
+    ordering = ['customer', 'total_price', 'date_ordered']  # Сортировка по строкам
     list_filter = ['customer', 'total_price', 'date_ordered']  # Список отбора по строкам
     search_fields = ['customer', 'total_price', 'date_ordered']  # Список строк для поиска
     search_help_text = "Поиск возможен по: 'customer', 'total_price', 'date_ordered'"  # Текст справки
-    # readonly_fields = ['id']  # Поле только для чтения
+    readonly_fields = ['date_ordered']  # Поле только для чтения
 
     fieldsets = [
         (
