@@ -1,8 +1,8 @@
+from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import path
 from . import views
 from .views import update_product, update_client, upload_image, add_user, add_product
-from django.conf.urls.static import static
 
 
 urlpatterns = [
