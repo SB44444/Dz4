@@ -1,18 +1,47 @@
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
-from . models import User, Product, Order, Gallery
+from django.shortcuts import render, get_object_or_404, redirect
+from . models import User, Product, Order, Gallery, CartItem
 from . forms import ImageForm, ProductForm, UserForm
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-def index(request):
+def product_list(request):
+    products = Product.objects.all()
+    return render(request, 'dz_app4/index.html', {'products': products})
+
+
+def view_cart(request):
+    cart_items = CartItem.objects.filter(user=request.user)
+    total_price = sum(item.product.price * item.quantity for item in cart_items)
+    return render(request, 'dz_app4/cart.html', {'cart_items': cart_items, 'total_price': total_price})
+
+
+def add_to_cart(request, product_id):
+    product = Product.objects.get(id=product_id)
+    cart_item, created = CartItem.objects.get_or_create(product=product, user=request.user)
+    cart_item.quantity += 1
+    cart_item.save()
+    return redirect('cart:view_cart')
+
+
+def remove_from_cart(request, item_id):
+    cart_item = CartItem.objects.get(id=item_id)
+    cart_item.delete()
+    return redirect('cart:view_cart')
+
+
+def home(request):
+    return HttpResponse('Hello, World!')
+
+
+def index1(request):
     # return HttpResponse("Hello, world!")
     # logger.info('main get request')
-    context = {'index': ['Старт проекта интернет-мазина 4']}
-    return render(request, 'dz_app4/index.html', context=context)  # Главная
+    context = {'index1': ['Старт проекта интернет-мазина 4']}
+    return render(request, 'dz_app4/index1.html', context=context)  # Главная
 
 
 def about(request):
@@ -24,19 +53,19 @@ def about(request):
 def get_product(request, pk):
     logger.info('Get product info')
     product = Product.objects.filter(pk=int(pk)).first()  # Добавить перенаправление при отсутствии ID
-    return render(request, template_name='dz_app4/product_card.html', context={'product': product})  # Продукт по ID
+    return render(request, template_name='dz_app4/get_product.html', context={'product': product})  # Продукт по ID
 
 
 def get_products(request):
     products = Product.objects.all()
     context = {'<br>'.join([str(products) for products in products])}  # Все продукты
-    return render(request, template_name='dz_app4/all_products.html', context={'context': context})
+    return render(request, template_name='dz_app4/get_products.html', context={'context': context})
 
 
 def get_users(request):
     users = User.objects.all()
     context = {'<br>'.join([str(users) for users in users])}  # Все клиенты
-    return render(request, template_name='dz_app4/all_products.html', context={'context': context})
+    return render(request, template_name='dz_app4/get_products.html', context={'context': context})
 
 
 def get_order(request, pk):
@@ -217,6 +246,4 @@ def upload_image(request, product_id):
 
 def get_media(request):
     media = Gallery.objects.all()
-    context = {'media': media}
-    template = 'gallery.html'
-    return render(request, template, context=context)
+    return render(request, 'dz_app4/get_media.html', {'media': media})

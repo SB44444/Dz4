@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Product, Order  # Category
+from .models import User, Product, Order, CartItem  # Category
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -109,6 +109,22 @@ class OrderAdmin(admin.ModelAdmin):
     ]
 
 
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = ['user', 'product', 'quantity', 'date_added', 'status_cart']  # Отображаемые поля
+    readonly_fields = ['date_added']  # Поле только для чтения
+
+    fieldsets = [
+        (
+            'Корзина',
+            {
+                'classes': ['wide'],
+                'fields': ['user', 'product', 'quantity', 'date_added', 'status_cart']
+            },
+        ),
+    ]
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Order, OrderAdmin)
+admin.site.register(CartItem, CartItemAdmin)

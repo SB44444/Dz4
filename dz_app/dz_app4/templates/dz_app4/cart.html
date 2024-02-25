@@ -1,8 +1,11 @@
-<!DOCTYPE html>
+<!-- cart/cart.html -->
+
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
-	<title>Product Catalog</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
 	<style>
 		/* Add CSS styles for flex container and items */
 		.product-list {
@@ -14,8 +17,9 @@
 		}
 
 		.product-item {
+			
 			flex: 1; /* Grow to fill available space evenly */
-			max-width: 30%; /* Limit item width to avoid overcrowding */
+			/* Limit item width to avoid overcrowding */
 			margin: 10px; /* Add spacing between items */
 			border: 1px solid #ccc; /* Add a border for visual separation */
 			padding: 10px;
@@ -34,21 +38,31 @@
 		}
 	</style>
 </head>
-<body>
-	<h1>Product Catalog</h1>
-	
-	<ul class="product-list">
-		{% for product in products %}
-			<li class="product-item">
-				<img src="{{ product.image_field.url }}" alt="{{ product.name }}" width="200" height="150">
-				<h2>{{ product.name }}</h2>
-				<p>{{ product.description }}</p>
-				<p>Стоимость: {{ product.price }} </p>
-				<a href="#" class="buy-now-button">Buy Now</a>
-				<a class="buy-now-button" href="{% url 'cart:add_to_cart' product.id %}">Add to Cart</a>
 
-			</li>
-		{% endfor %}
-	</ul>
+<body>
+
+	<h1>Your Shopping Cart</h1>
+
+	<div class="product-list">
+
+	
+
+	{% for item in cart_items %}
+	<div class="product-item">
+		<p>{{ item.product.name }} ({{ item.quantity }})</p>
+		<p>Price: ${{ item.product.price }}</p>
+		<a href="{% url 'cart:remove_from_cart' item.id %}">Remove</a>
+	</div>
+	{% empty %}
+	<p>Your cart is empty.</p>
+	{% endfor %}
+
+	</div>
+
+	<p>Total Price: ${{ total_price }}</p>
+
+	<a href="{% url 'cart:product_list' %}">Continue Shopping</a>
+
 </body>
+
 </html>

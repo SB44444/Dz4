@@ -16,7 +16,7 @@ SECRET_KEY = 'django-insecure-0-bzir#5t^ai!8yri9-dn7y01g2-%3c#=ynrg558(#zqy!jy6p
 # SECRET_KEY = os.getenv('SECRET_KEY')
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-STATIC_ROOT = BASE_DIR / 'static/'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dz_app4',
+    'dz_app'
 ]
 
 MIDDLEWARE = [
@@ -113,6 +114,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / "static"]
+# STATIC_ROOT = BASE_DIR / 'static/'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'additional_static'),]
 
@@ -121,7 +124,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

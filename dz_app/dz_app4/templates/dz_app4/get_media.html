@@ -5,7 +5,8 @@
 {% block content %}
 
 {% if gallery.image %}
-    <div><a href="{{ MEDIA_URL }}{{ media.image.url }}" title="{{media.name}}"><img src="{{ MEDIA_URL }}{{ media.image.url }}"></a></div>
+    <div><a href="{{ MEDIA_URL }}{{ media.image.url }}" title="{{media.name}}">
+        <img src="{{ MEDIA_URL }}{{ media.image.url }}"></a></div>
 {% endif %}
 
 {% endblock %}
