@@ -1,54 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Product Catalog</title>
-	<style>
-		/* Add CSS styles for flex container and items */
-		.product-list {
-			display: flex;
-			flex-wrap: wrap; /* Allow items to wrap to the next row if necessary */
-			justify-content: space-between; /* Space items evenly along the main axis */
-			list-style: none; /* Remove list styles */
-			padding: 0;
-		}
+{% extends 'dz_app4/base.html' %}
+{% load static %}
+{% block title %} Главная {% endblock %}
 
-		.product-item {
-			flex: 1; /* Grow to fill available space evenly */
-			max-width: 30%; /* Limit item width to avoid overcrowding */
-			margin: 10px; /* Add spacing between items */
-			border: 1px solid #ccc; /* Add a border for visual separation */
-			padding: 10px;
-			text-align: center;
-		}
+{% block content %}
+<h1>Главная DZ 4</h1>
+<h2>Интернет-мазгаин</h2>
+<p><a href="{% url 'admin:index' %}">link to admin panel</a></p>
 
-		/* Style the "Buy Now" button */
-		.buy-now-button {
-			display: block;
-			margin-top: 10px;
-			background-color: #007bff;
-			color: #fff;
-			text-decoration: none;
-			padding: 5px 10px;
-			border-radius: 5px;
-		}
-	</style>
-</head>
-<body>
-	<h1>Product Catalog</h1>
-	
-	<ul class="product-list">
-		{% for product in products %}
-			<li class="product-item">
-				<img src="{{ product.image_field.url }}" alt="{{ product.name }}" width="200" height="150">
-				<h2>{{ product.name }}</h2>
-				<p>{{ product.description }}</p>
-				<p>Стоимость: {{ product.price }} </p>
-				<a href="#" class="buy-now-button">Buy Now</a>
-				<a class="buy-now-button" href="{% url 'cart:add_to_cart' product.id %}">Add to Cart</a>
 
-			</li>
-		{% endfor %}
-	</ul>
-</body>
-</html>
+
+<p>{% for item in products %}
+    <li> {% if item.image_field %} <img src="{{ item.image_field.url }}"
+                                  style="width: 150px; height: 160px; border: 1px solid red;"/>
+        {% endif %}
+        {{ item.name }}
+    </li>
+
+    {% endfor %}
+</p>
+
+
+{% endblock %}
