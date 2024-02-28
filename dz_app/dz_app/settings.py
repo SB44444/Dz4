@@ -13,12 +13,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-0-bzir#5t^ai!8yri9-dn7y01g2-%3c#=ynrg558(#zqy!jy6p'
+
 # SECRET_KEY = os.getenv('SECRET_KEY')
+
+# SESSION_COOKIE_SECURE = False
+# SESSION_COOKIE_SECURE: bool = True
+# SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+# SESSION_COOKIE_HTTPONLY = False
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_AGE = 102425
+
+CART_SESSION_ID = 'cart'
+
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
                 '127.0.0.1',
@@ -53,10 +65,14 @@ ROOT_URLCONF = 'dz_app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+
+        # 'DIRS': [],
         # 'DIRS': [BASE_DIR / 'tamplates',
         #          BASE_DIR / 'dz_app4/tamplates',
         #          ],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+                    ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -153,11 +169,11 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],  # ['console', 'file']
+            'handlers': ['console'], ['console', 'file']
             'level': 'INFO',  # уровень доступа
         },
         'myapp': {
-            'handlers': ['console'],  # 'handlers': ['console', 'file'],
+            'handlers': ['console'], 'handlers': ['console', 'file'],
             'level': 'DEBUG',
             'propagate': True,
         },

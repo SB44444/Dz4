@@ -8,7 +8,6 @@
 <p><a href="{% url 'admin:index' %}">link to admin panel</a></p>
 
 
-
 <p>{% for item in products %}
     <li> {% if item.image_field %} <img src="{{ item.image_field.url }}"
                                   style="width: 150px; height: 160px; border: 1px solid red;"/>

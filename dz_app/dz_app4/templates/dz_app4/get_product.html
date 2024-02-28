@@ -14,9 +14,8 @@
             <th style="width:80px; text-align:left">К-во</th>
             <th style="width:400px; text-align:center">Дата получения</th>
             <th style="width:400px; text-align:left">Описание</th>
-            <th style="width:1500px; text-align:center">Фото</th>
+            <th style="width:1500px; text-align:left">Фото</th>
         </tr>
-
         <tr>
             <td>{{ product.pk }}</td>
             <td>{{ product.name }}</td>
@@ -24,8 +23,9 @@
             <td>{{ product.store }}</td>
             <td>{{ product.date_receipt }}</td>
             <td>{{ product.description }}</td>
-            <td>{{ product.image_field } }</td>
+            <td><img src="{{ product.image_field.url }}" width="160" height="90"></td>
         </tr>
     </table>
+    <a class="buy-now-button" href="{% url 'cart:add_to_cart' product.id %}">Заказать</a>
 </body>
 {% endblock %}

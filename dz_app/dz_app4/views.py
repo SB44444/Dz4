@@ -1,16 +1,88 @@
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.template.backends import django
+
 from . models import User, Product, Order, Gallery, CartItem
-from . forms import ImageForm, ProductForm, UserForm
+from . forms import ImageForm, ProductForm, UserForm, LoginForm, RegistrationForm
 import logging
 
 logger = logging.getLogger(__name__)
 
 
+def password_updated(request, user_id):
+    user = User.objects.filter(pk=user_id).first()
+    return render(request, 'dz_app4/password_updated.html', context={'user': user})
+
+
+def logout(request, user_id):
+    user = User.objects.filter(pk=user_id).first()
+    try:
+        del request.session['user_id']
+        logger.info(f'Пользователь {user.name} вышел из системы')
+    except KeyError:
+        HttpResponse("You're logged out.")
+        pass
+    return redirect('index')
+
+
+def login_user(request):
+    message = 'Ошибка в данных'
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            tel = form.cleaned_data['tel']
+            user = User.objects.filter(name=name).first()
+            message = f'Добрый день, {name}, {tel}'
+            logger.info(f'Пользователь {user} вошел в систему')
+            request.session['user_id'] = user.pk
+            # return render(request, 'dz_app4/go.html', {'user_id': user.pk, 'products': Product.objects.all()})
+            return redirect('product_list')
+        else:
+            logger.info(f'Некорректный пароль')
+            # message = f'Некорректный пароль'
+            return redirect('registration')
+
+    message = f'Некорректный пароль'
+    form = LoginForm()
+    logger.info(f'Некорректный пароль')
+    return render(request, 'dz_app4/login.html', {'form': form, 'message': message})
+
+
+def registration(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        message = 'Ошибка в данных'
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            if User.objects.filter(name__iexact=name):
+                message = 'Пользователь c таким именем уже зарегистрирован'
+                form = LoginForm()
+                logger.info(f'Попытка регистрации c зарегистрированым именем')
+                return render(request, 'dz_app4/login.html', {'form': form, 'message': message})
+            else:
+                email = form.cleaned_data['email']
+                tel = form.cleaned_data['tel']
+                adress = form.cleaned_data['adress']
+                user = User(name=name, email=email, tel=tel, adress=adress)
+                user.save()
+                user.set_password()
+                message = 'Пользователь успешно сохранён'
+                logger.info(f'Пользователь {user} сохранен')
+                return render(request, 'dz_app4/go.html', {'user_id': user.pk, 'products': Product.objects.all()})
+                # return redirect('product_list')
+                # return redirect('login_user')
+    else:
+        form = RegistrationForm()
+        message = 'Заполните форму регистрации'
+        return redirect('registration')
+    return render(request, 'dz_app4/registration.html', {'form': form, 'message': message})
+
+
 def product_list(request):
     products = Product.objects.all()
-    return render(request, 'dz_app4/index.html', {'products': products})
+    return render(request, 'dz_app4/go.html', {'products': products})
 
 
 def view_cart(request):
@@ -20,8 +92,11 @@ def view_cart(request):
 
 
 def add_to_cart(request, product_id):
+    # customer_id = request.session.get('user_id')
     product = Product.objects.get(id=product_id)
-    cart_item, created = CartItem.objects.get_or_create(product=product, user=request.user)
+    # order_cust = Order.objects.get(customer, id=product_id)
+    # cart_item, created = CartItem.objects.get_or_create(product=product, user=request.user)
+    cart_item, created = CartItem.objects.get_or_create(product=product, user_id=request.session.get('user_id'))
     cart_item.quantity += 1
     cart_item.save()
     return redirect('cart:view_cart')
@@ -37,11 +112,11 @@ def home(request):
     return HttpResponse('Hello, World!')
 
 
-def index1(request):
+def index(request):
     # return HttpResponse("Hello, world!")
     # logger.info('main get request')
     context = {'index1': ['Старт проекта интернет-мазина 4']}
-    return render(request, 'dz_app4/index1.html', context=context)  # Главная
+    return render(request, 'dz_app4/index.html', context=context)  # Главная
 
 
 def about(request):
