@@ -169,15 +169,16 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['console'], ['console', 'file']
+            'handlers': ['console'],  # ['console', 'file']
             'level': 'INFO',  # уровень доступа
         },
         'myapp': {
-            'handlers': ['console'], 'handlers': ['console', 'file'],
+            'handlers': ['console'],  # 'handlers': ['console', 'file'],
             'level': 'DEBUG',
             'propagate': True,
         },
     },
 }
+
 
 
