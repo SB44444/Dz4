@@ -19,7 +19,7 @@ class UserAdmin(admin.ModelAdmin):
             'User',
             {
                 'classes': ['wide'],
-                'fields': ['id', 'name', 'tel', 'email'],
+                'fields': ['name', 'email'],
             },
         ),
         (
@@ -27,7 +27,7 @@ class UserAdmin(admin.ModelAdmin):
             {
                 'classes': ['collapse'],
                 'description': 'Contact information',
-                'fields': ['adress'],
+                'fields': ['tel', 'adress'],
             },
         ),
         (
@@ -60,7 +60,7 @@ class ProductAdmin(admin.ModelAdmin):
             'Продукт',
             {
                 'classes': ['wide'],
-                'fields': ['id', 'name', 'price', 'store', 'date_receipt'],
+                'fields': ['name', 'price', 'store', 'date_receipt'],
             },
         ),
         (
@@ -72,7 +72,7 @@ class ProductAdmin(admin.ModelAdmin):
             },
         ),
         (
-            'Фото',
+            'Дополнительно',
             {
                 'classes': ['collapse'],
                 'description': 'Фото',
@@ -95,7 +95,7 @@ class OrderAdmin(admin.ModelAdmin):
             'Заказ',
             {
                 'classes': ['wide'],
-                'fields': ['id', 'customer', 'total_price', 'date_ordered'],
+                'fields': ['customer', 'total_price', 'date_ordered'],
             },
         ),
         (
@@ -115,10 +115,10 @@ class CartItemAdmin(admin.ModelAdmin):
 
     fieldsets = [
         (
-            'Строка заказа',
+            'Корзина',
             {
                 'classes': ['wide'],
-                'fields': ['id', 'user', 'product', 'quantity', 'date_added', 'status_cart']
+                'fields': ['user', 'product', 'quantity', 'date_added', 'status_cart']
             },
         ),
     ]

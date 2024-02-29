@@ -37,7 +37,9 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=0)
     date_added = models.DateTimeField(auto_now_add=True)
     status_cart = models.CharField(max_length=20, default='формируется')
+    # cart_item_price = models.DecimalField(max_digits=8, decimal_places=2, default=0)
 
+    # @property
     @staticmethod
     def item_price(self, product):
         cart_item_price = product.price * self.quantity
@@ -45,6 +47,7 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f'CartItem: {self.product.name}, quantity: {self.quantity}'
+        # return f'CartItem: {self.product}, quantity: {self.quantity}, cart_item_price: {self.cart_item_price}'
 
 
 class Order(models.Model):  # Заказ
@@ -83,6 +86,41 @@ class Order(models.Model):  # Заказ
                 f'\nДата_заказа: {self.date_ordered}, '                
                 f'\nСумма: {self.total_price}')
 
+
+# class Cart(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     products = models.ManyToManyField(CartItem)
+#     cart_price = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+#     status_cart = models.CharField(max_length=20, default='формируется')
+#
+#     def add_item(self, product, quantity):
+#         cart_price = product.price * quantity
+#         if not self.products.filter(product=product).exists():
+#             cart_item = CartItem.objects.create(
+#                 cart=self, product=product, quantity=quantity, cart_price=cart_price)
+#             self.products.add(cart_item)
+#         else:
+#             existing_item = self.products.get(product=product)
+#             existing_item.quantity += quantity
+#             existing_item.cart_price += existing_item.price * quantity
+#             existing_item.save()
+#
+#     def remove_item(self, product):
+#         if self.products.filter(product=product).exists():
+#             self.products.get(product=product).delete()
+#
+#     @property
+#     def clear(self):
+#         self.products.all().delete()
+#
+#     # def get_total_quantity(self):
+#     #     return sum([product.quantity for product in self.products.all()])
+#
+#     def get_total_price(self):
+#         return sum([product.cart_item_price for product in self.products.all()])
+#
+#     def __str__(self):
+#         return f'Cart: {self.user}, products: {self.products}'
 
 
 class Gallery(models.Model):

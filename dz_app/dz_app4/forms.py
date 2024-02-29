@@ -18,12 +18,12 @@ class RegistrationForm(forms.Form):
 class UserForm(forms.Form):  # Товар
     # client = forms.ModelChoiceField(queryset=User.objects.all())
     name = forms.CharField(max_length=100,
-                            widget=forms.TextInput(attrs={'class': 'form-control',
-                                                        'placeholder': 'Введите имя пользователя'}))
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                         'placeholder': 'Введите имя пользователя'}))
     adress = forms.CharField(max_length=100,
-                            widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите свой адрес'}))
+                             widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите свой адрес'}))
     tel = forms.CharField(max_length=20,
-                            widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите номер телефона'}))
+                          widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите номер телефона'}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'user@mail.ru'}))
     date_visit = forms.DateTimeField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
     about = forms.CharField(widget=forms.Textarea(attrs={"placeholder": "Комментарии"}))
@@ -32,8 +32,8 @@ class UserForm(forms.Form):  # Товар
 class ProductForm(forms.Form):  # Товар
     # product = forms.ModelChoiceField(queryset=Product.objects.all())
     name = forms.CharField(max_length=100,
-                            widget=forms.TextInput(attrs={'class': 'form-control',
-                                                        'placeholder': 'Введите название продукта'}))
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                         'placeholder': 'Введите название продукта'}))
     price = forms.DecimalField(max_digits=8, decimal_places=2)
     description_product = forms.CharField(widget=forms.Textarea(attrs={"placeholder": "Описание товара"}))
     store = forms.IntegerField(min_value=0)
