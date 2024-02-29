@@ -161,19 +161,19 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',  # добавлен параметр formatter
         },
-        # 'file': {
-        #     'class': 'logging.FileHandler',
-        #     'filename': './log/django.log',  # путь к файлу
-        #     'formatter': 'verbose',  # добавлен параметр formatter
-        # },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': './log/django.log',  # путь к файлу
+            'formatter': 'verbose',  # добавлен параметр formatter
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],  # ['console', 'file']
+            'handlers': ['console', 'file'],
             'level': 'INFO',  # уровень доступа
         },
         'myapp': {
-            'handlers': ['console'],  # 'handlers': ['console', 'file'],
+            'handlers': ['console', 'file'],
             'level': 'DEBUG',
             'propagate': True,
         },
