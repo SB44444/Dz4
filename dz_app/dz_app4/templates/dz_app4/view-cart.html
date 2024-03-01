@@ -17,7 +17,7 @@
 		}
 
 		.product-item {
-			
+
 			flex: 1; /* Grow to fill available space evenly */
 			/* Limit item width to avoid overcrowding */
 			margin: 10px; /* Add spacing between items */
@@ -54,6 +54,6 @@
 	</div>
 	<p>Total Price: ${{ total_price }}</p>
 
-	<a href="{% url 'cart:product_list' %}">Продолжить заказ</a>
+	<a href="{% url 'view_cart:product_list' %}">Продолжить заказ</a>
 </body>
 </html>

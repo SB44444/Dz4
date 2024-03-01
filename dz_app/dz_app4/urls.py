@@ -2,23 +2,24 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import path
 from . import views
-from .views import upload_image, add_user, add_product  # product_list, view_cart, add_to_cart, remove_from_cart, home
+from .views import upload_image, add_user, add_product, product_list, view_cart, add_to_cart, remove_from_cart, home
 app_name = 'cart'
 
 urlpatterns = [
-    path('go/', views.product_list, name="go"),
-    path('cart/', views.view_cart, name='view_cart'),
+    path('', views.index, name='index'),
+    path('add-to-cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+    path('login/', views.login_user, name='login'),
+    path('logout/', views.logout_user, name='logout'),
+    path('registration/', views.registration, name='registration'),
+    path('product-list/', views.product_list, name='product_list'),
+    path('dz_app4/add-to-cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+    path('view-cart/', views.view_cart, name='view_cart'),
+    path('about/', views.about, name='about'),
+    path('dz_app4/go/', views.product_list, name="dz_app4/go"),
+    path('dz_app4/cart/', views.view_cart, name='view_cart'),
     path('add/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
     path('remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('home/', views.home, name='home'),
-
-    path('password_updated/', views.password_updated, name='password_updated'),
-    path('login/', views.login_user, name='login'),
-    path('logout/', views.logout, name='logout'),
-    path('registration/', views.registration, name='registration'),
-
-    path('', views.index, name='index'),
-    path('about/', views.about, name='about'),
     path('add/', add_user, name='add_user'),
     path('admin/dz_app4/user/add/', add_user, name='add_user'),
     path('add_product/', add_product, name='add_product'),

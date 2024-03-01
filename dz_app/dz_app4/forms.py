@@ -1,18 +1,18 @@
 from django import forms
-from .models import Product, User
+from .models import User
 
 
 class LoginForm(forms.Form):
-    name = forms.CharField(label='Имя пользователя', max_length=100)
-    password = forms.CharField(label='Пароль', widget=forms.PasswordInput, min_length=6)
+    name = forms.CharField(label='Username', max_length=100)
+    password = forms.CharField(label='Password', widget=forms.PasswordInput)
 
 
-class RegistrationForm(forms.Form):
-    name = forms.CharField(label='Имя пользователя', max_length=100)
-    email = forms.EmailField(label='Электронная почта')
-    password = forms.CharField(widget=forms.PasswordInput, min_length=3)
-    tel = forms.CharField(label='Телефон', max_length=20)
-    adress = forms.CharField(label='Адрес доставки', max_length=150)
+class RegistrationForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = ['name', 'email', 'password', 'tel', 'adress']
 
 
 class UserForm(forms.Form):  # Товар
@@ -43,18 +43,3 @@ class ProductForm(forms.Form):  # Товар
 
 class ImageForm(forms.Form):  # foto Товара
     image = forms.ImageField()
-
-
-class ChoiceProductById(forms.Form):  # id Товара
-    id_product = forms.IntegerField()
-
-
-class ChoiceProductByClientBydays(forms.Form):  # User
-    id_client = forms.IntegerField()
-    days = forms.IntegerField()
-
-# class OrderForm(forms.Form):  # Заказ
-#     customer = forms.ModelChoiceField(queryset=User.objects.all())
-#     products = forms.ModelChoiceField(queryset=Product.objects.all())
-#     date_ordered = forms.DateTimeField(auto_now_add=True)
-#     total_price = forms.DecimalField(max_digits=8, decimal_places=2)

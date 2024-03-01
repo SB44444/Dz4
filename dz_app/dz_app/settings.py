@@ -179,12 +179,3 @@ LOGGING = {
         },
     },
 }
-
-
-# SESSION_COOKIE_SECURE = False
-# SESSION_COOKIE_SECURE: bool = True
-# # SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-# SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-# SESSION_COOKIE_HTTPONLY = True
-# SESSION_COOKIE_AGE = 86400
-# CART_SESSION_ID = 'cart'

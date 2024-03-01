@@ -1,11 +1,8 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
+	<title>Меню пиццерии</title>
 	<style>
 		/* Add CSS styles for flex container and items */
 		.product-list {
@@ -17,9 +14,8 @@
 		}
 
 		.product-item {
-			
 			flex: 1; /* Grow to fill available space evenly */
-			/* Limit item width to avoid overcrowding */
+			max-width: 30%; /* Limit item width to avoid overcrowding */
 			margin: 10px; /* Add spacing between items */
 			border: 1px solid #ccc; /* Add a border for visual separation */
 			padding: 10px;
@@ -39,21 +35,21 @@
 	</style>
 </head>
 <body>
-	<h1>Ваши заказы</h1>
+	<h1>Меню пиццерии</h1>
 
-	<div class="product-list">
-	{% for item in cart_items %}
-	<div class="product-item">
-		<p>{{ item.product.name }} ({{ item.quantity }})</p>
-		<p>Price: ${{ item.product.price }}</p>
-		<a href="{% url 'cart:remove_from_cart' item.id %}">Remove</a>
-	</div>
-	{% empty %}
-	<p>Your cart is empty.</p>
-	{% endfor %}
-	</div>
-	<p>Total Price: ${{ total_price }}</p>
 
-	<a href="{% url 'cart:product_list' %}">Продолжить заказ</a>
+	<ul class="product-list">
+		{% for product in products %}
+			<li class="product-item">
+				<img src="{{ product.image_field.url }}" alt="{{ product.name }}" width="200" height="150">
+				<h2>{{ product.name }}</h2>
+				<p>{{ product.description }}</p>
+				<p>Стоимость: {{ product.price }} </p>
+				<a href="#" class="buy-now-button">Заказать</a>
+				<a class="buy-now-button" href="{% url 'cart:add_to_cart' product.id %}">Добавить в корзину</a>
+
+			</li>
+		{% endfor %}
+	</ul>
 </body>
 </html>

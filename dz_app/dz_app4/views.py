@@ -1,10 +1,11 @@
+from django.contrib.auth import authenticate, login
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.template.backends import django
-
-from . models import User, Product, Order, Gallery, CartItem
-from . forms import ImageForm, ProductForm, UserForm, LoginForm, RegistrationForm
+from django.contrib import messages
+from .models import User, Product, Order, Gallery, CartItem
+from .forms import ImageForm, ProductForm, UserForm, LoginForm, RegistrationForm
+from django.contrib.auth.models import User
 import logging
 
 logger = logging.getLogger(__name__)
@@ -27,62 +28,43 @@ def logout(request, user_id):
 
 
 def login_user(request):
-    message = 'Ошибка в данных'
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            name = form.cleaned_data['name']
-            tel = form.cleaned_data['tel']
-            user = User.objects.filter(name=name).first()
-            message = f'Добрый день, {name}, {tel}'
-            logger.info(f'Пользователь {user} вошел в систему')
-            request.session['user_id'] = user.pk
-            # return render(request, 'dz_app4/go.html', {'user_id': user.pk, 'products': Product.objects.all()})
-            return redirect('product_list')
-        else:
-            logger.info(f'Некорректный пароль')
-            # message = f'Некорректный пароль'
-            return redirect('registration')
+            username = form.cleaned_data['name']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, 'You have successfully logged in.')
+                return redirect('cart:product_list')
+            else:
+                messages.error(request, 'Invalid username or password.')
+    else:
+        form = LoginForm()
+    return render(request, 'dz_app4/login.html', {'form': form})
 
-    message = f'Некорректный пароль'
-    form = LoginForm()
-    logger.info(f'Некорректный пароль')
-    return render(request, 'dz_app4/login.html', {'form': form, 'message': message})
+
+def logout_user(request):
+    logout(request)
+    messages.success(request, 'You have been logged out.')
+    return redirect('index')
 
 
 def registration(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
-        message = 'Ошибка в данных'
         if form.is_valid():
-            name = form.cleaned_data['name']
-            if User.objects.filter(name__iexact=name):
-                message = 'Пользователь c таким именем уже зарегистрирован'
-                form = LoginForm()
-                logger.info(f'Попытка регистрации c зарегистрированым именем')
-                return render(request, 'dz_app4/login.html', {'form': form, 'message': message})
-            else:
-                email = form.cleaned_data['email']
-                tel = form.cleaned_data['tel']
-                adress = form.cleaned_data['adress']
-                user = User(name=name, email=email, tel=tel, adress=adress)
-                user.save()
-                user.set_password()
-                message = 'Пользователь успешно сохранён'
-                logger.info(f'Пользователь {user} сохранен')
-                return render(request, 'dz_app4/go.html', {'user_id': user.pk, 'products': Product.objects.all()})
-                # return redirect('product_list')
-                # return redirect('login_user')
+            messages.success(request, 'You have successfully registered.')
+            return redirect('login')  # correct URL name for the login page
     else:
         form = RegistrationForm()
-        message = 'Заполните форму регистрации'
-        return redirect('registration')
-    return render(request, 'dz_app4/registration.html', {'form': form, 'message': message})
+    return render(request, 'registration.html', {'form': form})
 
 
 def product_list(request):
     products = Product.objects.all()
-    return render(request, 'dz_app4/go.html', {'products': products})
+    return render(request, 'dz_app4/product_list.html', {'products': products})
 
 
 def view_cart(request):
@@ -92,20 +74,25 @@ def view_cart(request):
 
 
 def add_to_cart(request, product_id):
-    # customer_id = request.session.get('user_id')
-    product = Product.objects.get(id=product_id)
-    # order_cust = Order.objects.get(customer, id=product_id)
-    # cart_item, created = CartItem.objects.get_or_create(product=product, user=request.user)
-    cart_item, created = CartItem.objects.get_or_create(product=product, user_id=request.session.get('user_id'))
-    cart_item.quantity += 1
-    cart_item.save()
-    return redirect('cart:view_cart')
+    if request.user.is_authenticated:
+        product = Product.objects.get(pk=product_id)
+        cart_item, created = CartItem.objects.get_or_create(user=request.user, product=product)
+        if not created:
+            cart_item.quantity += 1
+            cart_item.save()
+        messages.success(request, 'Product added to cart successfully.')
+        # return redirect('cart:go')
+        # return redirect('cart:cart')
+        return redirect('cart:view_cart')
+    else:
+        messages.error(request, 'You need to log in to add items to cart.')
+        return redirect('login')
 
 
 def remove_from_cart(request, item_id):
     cart_item = CartItem.objects.get(id=item_id)
     cart_item.delete()
-    return redirect('cart:view_cart')
+    return redirect('view_cart')
 
 
 def home(request):
@@ -113,8 +100,6 @@ def home(request):
 
 
 def index(request):
-    # return HttpResponse("Hello, world!")
-    # logger.info('main get request')
     context = {'index1': ['Старт проекта интернет-мазина 4']}
     return render(request, 'dz_app4/index.html', context=context)  # Главная
 
